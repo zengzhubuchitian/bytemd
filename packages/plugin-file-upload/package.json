@@ -1,11 +1,11 @@
 {
-  "name": "@bytemd/plugin-zip",
-  "version": "1.0.4",
-  "description": "ByteMD plugin to support Zip upload",
+  "name": "bytemd-plugin-file-upload",
+  "version": "1.0.5",
+  "description": "ByteMD plugin to support file upload",
   "repository": {
     "type": "git",
     "url": "https://github.com/zengzhubuchitian/bytemd.git",
-    "directory": "packages/plugin-zip"
+    "directory": "packages/plugin-file-upload"
   },
   "license": "MIT",
   "author": "echo",

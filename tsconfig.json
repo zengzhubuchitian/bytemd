@@ -12,7 +12,7 @@
     { "path": "packages/plugin-math-ssr" },
     { "path": "packages/plugin-medium-zoom" },
     { "path": "packages/plugin-mermaid" },
-    { "path": "packages/plugin-zip" },
+    { "path": "packages/plugin-file-upload" },
     { "path": "packages/react" },
     { "path": "packages/vue" },
     { "path": "packages/vue-next" }

@@ -4,37 +4,40 @@ import type { BytemdPlugin, BytemdEditorContext } from 'bytemd'
 import selectFiles from 'select-files'
 
 type Locale = {
-  zip: string
-  zipTitle: string
+  file: string
+  fileTitle: string
 }
 
-export interface BytemdPluginZipOptions {
+export interface BytemdPluginFileOptions {
   locale?: Partial<Locale>
-  uploadZip?: (file: File) => Promise<string | undefined>
+  uploadFile?: (file: File) => Promise<string | undefined>
+  accept?: string
 }
 
-export default function zipUpload({
+export default function fileUpload({
   locale: _locale = {},
-  uploadZip
-}: BytemdPluginZipOptions = {}): BytemdPlugin {
+  uploadFile,
+  accept = 'application/zip',
+}: BytemdPluginFileOptions = {}): BytemdPlugin {
   const locale = { ...en, ..._locale } as Locale
 
   return {
     actions: [
       {
-        title: locale.zip,
+        title: locale.file,
         icon: icons.FileZip({}),
-        cheatsheet: `![${locale.zip}](${locale.zipTitle})`,
-        handler: uploadZip
+        cheatsheet: `![${locale.file}](${locale.fileTitle})`,
+        handler: uploadFile
           ? {
               type: 'action',
               async click(ctx: BytemdEditorContext) {
                 const files = await selectFiles({
-                  accept: 'application/zip',
+                  // .rpm, .deb, .zip, .gz, .pdf
+                  accept,
                   multiple: false,
                 })
                 if (files?.length) {
-                  await handleZipUpload(ctx, uploadZip, files[0])
+                  await handleFileUpload(ctx, uploadFile, files[0])
                 }
               },
             }
@@ -44,12 +47,12 @@ export default function zipUpload({
   }
 }
 
-export async function handleZipUpload(
+export async function handleFileUpload(
   { editor, appendBlock, codemirror }: BytemdEditorContext,
-  uploadZip: NonNullable<BytemdPluginZipOptions['uploadZip']>,
+  uploadFile: NonNullable<BytemdPluginFileOptions['uploadFile']>,
   file: File
 ) {
-  const res = await uploadZip(file)
+  const res = await uploadFile(file)
   const pos = appendBlock(`[${file.name}](${res})`)
   editor.setSelection(pos, codemirror.Pos(pos.line + 1, 0))
   editor.focus()
